@@ -51,52 +51,42 @@ const searchSchema = new mongoose.Schema(
       required: true,
     },
 
+    images: {
+      type: [String],
+      default: [],
+    },
+
     //  Search Optimization
     keywords: {
       type: [String],
       default: [],
       index: true,
     },
-
+    unit: {
+      type: String,
+      enum: ["L", "kg"],
+      default: "L",
+    },
     //  Pricing
     price: {
-      type: Number, // selling price
+      type: Number,
       required: true,
     },
 
     retail_price: {
-      type: Number, // MRP / reference price
+      type: Number,
       required: true,
-    },
-
-    unit: {
-      type: String,
-      default: "kg",
     },
 
     //  Order & Supply
     min_order_quantity: {
-      value: {
-        type: Number,
-        required: true,
-      },
-      unit: {
-        type: String,
-        enum: ["L", "kg"],
-        default: "L",
-      },
+      type: Number,
+      required: true,
     },
 
     supply_capacity_per_day: {
-      value: {
-        type: Number,
-        required: true,
-      },
-      unit: {
-        type: String,
-        enum: ["L", "kg"],
-        default: "L",
-      },
+      type: Number,
+      required: true,
     },
 
     available_quantity: {
@@ -148,6 +138,12 @@ const searchSchema = new mongoose.Schema(
       default: true,
     },
 
+    location_name: {
+  type: String,
+  required: true,
+  trim: true,
+},
+
     //  Location (Geo Search)
     location: {
       type: {
@@ -166,11 +162,14 @@ const searchSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.Mixed,
       default: {},
     },
+   
   },
   {
     timestamps: true,
     collection: "resultsData",
-  }
+  },
+
+  
 );
 
 //  Geo Index

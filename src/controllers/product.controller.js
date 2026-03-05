@@ -1,17 +1,32 @@
-const { productInfo } = require("../services/product.service");
-
+const {
+  getProductInfo,
+  getSimilarProductsByDairy,
+} = require("../services/product.service");
 const product = async (req, res) => {
   try {
-    const data = await productInfo(req.params.id);
-
-    res.status(200).json({
+    const productId = Number(req.params.id);
+    const productData = await getProductInfo(productId);
+    if (!productData) {
+      return res.status(404).json({
+        success: false,
+        message: "Product not found",
+      });
+    }
+     const similarProducts = await getSimilarProductsByDairy(
+      productData.dairyId,
+      productData.productId
+    );
+     res.status(200).json({
       success: true,
-      result: data
+      result: {
+        product: productData,
+        similarProducts,
+      },
     });
   } catch (error) {
-    res.status(error.statusCode || 500).json({
+    res.status(500).json({
       success: false,
-      message: error.message
+      message: error.message,
     });
   }
 };
